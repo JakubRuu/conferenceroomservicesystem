@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import pl.sdaacademy.ConferenceRoomReservationSystem.SortTpe;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,25 +23,35 @@ class OrganizationController {
     public OrganizationController(OrganizationService organizationService) {
         this.organizationService = organizationService;
     }
+
     @GetMapping
-    List<Organization> getAll(){
-        return organizationService.getAllOrganizations();
+    List<Organization> getAll(@RequestParam(defaultValue = "ASC") SortTpe sortTpe) {
+        return organizationService.getAllOrganizations(sortTpe);
     }
+
+    @GetMapping("/{name}")
+    Organization getById(@PathVariable String name) {
+        return organizationService.getOrganization(name);
+    }
+
     @PostMapping
-    Organization add(@Validated(value = AddOrganization.class ) @RequestBody Organization organization){
+    Organization add(@Validated(value = AddOrganization.class) @RequestBody Organization organization) {
         return organizationService.addOrganization(organization);
     }
+
     @PutMapping("/{name}")
-    Organization update(@PathVariable String name,@Validated(value = UpdateOrganization.class) @RequestBody Organization organization){
-        return  organizationService.updateOrganization(name, organization);
+    Organization update(@PathVariable String name, @Validated(value = UpdateOrganization.class) @RequestBody Organization organization) {
+        return organizationService.updateOrganization(name, organization);
 
     }
+
     @DeleteMapping("{name}")
     Organization delete(@PathVariable String name) {
         return organizationService.deleteOrganization(name);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-     ResponseEntity<Object> handleValidationExceptions(
+    ResponseEntity<Object> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -50,8 +61,15 @@ class OrganizationController {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(value = NoSuchElementException.class)
     public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
