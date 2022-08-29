@@ -1,5 +1,5 @@
 package pl.sdaacademy.ConferenceRoomReservationSystem;
 
-public enum SortTpe {
+public enum SortType {
     ASC, DESC
 }

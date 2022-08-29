@@ -3,7 +3,7 @@ package pl.sdaacademy.ConferenceRoomReservationSystem.organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.sdaacademy.ConferenceRoomReservationSystem.SortTpe;
+import pl.sdaacademy.ConferenceRoomReservationSystem.SortType;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,7 +18,7 @@ class OrganizationService {
         this.organizationRepository = organizationRepository;
     }
 
-    List<Organization> getAllOrganizations(SortTpe sortTpe) {
+    List<Organization> getAllOrganizations(SortType sortTpe) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortTpe.name()), "name");
         return organizationRepository.findAll(sort);
     }

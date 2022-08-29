@@ -7,7 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import pl.sdaacademy.ConferenceRoomReservationSystem.SortTpe;
+import pl.sdaacademy.ConferenceRoomReservationSystem.SortType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ class OrganizationController {
     }
 
     @GetMapping
-    List<Organization> getAll(@RequestParam(defaultValue = "ASC") SortTpe sortTpe) {
+    List<Organization> getAll(@RequestParam(defaultValue = "ASC") SortType sortTpe) {
         return organizationService.getAllOrganizations(sortTpe);
     }
 
